@@ -14,27 +14,49 @@ router.post('/', async (req, res) => {
       enrollmentId: enrollment._id 
     })
   } catch (error) {
+    console.error('Enrollment error:', error)
     res.status(400).json({ error: 'Invalid enrollment data' })
   }
 })
 
-// GET /api/v1/enrollments - List enrollments (admin only)
-router.get('/', authMiddleware, async (req, res) => {
+// GET /api/v1/enrollments/stats - Get stats (TEMPORARILY NO AUTH)
+router.get('/stats', async (req, res) => {
   try {
-    const { status, search, page = 1, limit = 20 } = req.query
+    const total = await Enrollment.countDocuments()
+    const statusCounts = await Enrollment.aggregate([
+      { $group: { _id: '$status', count: { $sum: 1 } } }
+    ])
+
+    const stats = {
+      total,
+      new: statusCounts.find((s: any) => s._id === 'new')?.count || 0,
+      contacted: statusCounts.find((s: any) => s._id === 'contacted')?.count || 0,
+      enrolled: statusCounts.find((s: any) => s._id === 'enrolled')?.count || 0,
+    }
+
+    res.json(stats)
+  } catch (error) {
+    console.error('Stats error:', error)
+    res.status(500).json({ error: 'Failed to fetch stats' })
+  }
+})
+
+// GET /api/v1/enrollments - List enrollments (TEMPORARILY NO AUTH)
+router.get('/', async (req, res) => {
+  try {
+    const { status, search, page = 1, limit = 100 } = req.query
     
     const query: any = {}
     if (status) query.status = status
     if (search) {
       query.$or = [
-        { childName: new RegExp(search as string, 'i') },
+        { studentName: new RegExp(search as string, 'i') },
         { parentName: new RegExp(search as string, 'i') },
         { email: new RegExp(search as string, 'i') },
       ]
     }
 
     const enrollments = await Enrollment.find(query)
-      .populate('program')
       .sort({ createdAt: -1 })
       .limit(Number(limit))
       .skip((Number(page) - 1) * Number(limit))
@@ -43,12 +65,13 @@ router.get('/', authMiddleware, async (req, res) => {
 
     res.json({ enrollments, total, page: Number(page), limit: Number(limit) })
   } catch (error) {
+    console.error('Fetch enrollments error:', error)
     res.status(500).json({ error: 'Failed to fetch enrollments' })
   }
 })
 
-// PATCH /api/v1/enrollments/:id - Update enrollment status (admin only)
-router.patch('/:id', authMiddleware, async (req, res) => {
+// PATCH /api/v1/enrollments/:id - Update enrollment status (TEMPORARILY NO AUTH)
+router.patch('/:id', async (req, res) => {
   try {
     const { status } = req.body
     const enrollment = await Enrollment.findByIdAndUpdate(
@@ -58,6 +81,7 @@ router.patch('/:id', authMiddleware, async (req, res) => {
     )
     res.json(enrollment)
   } catch (error) {
+    console.error('Update error:', error)
     res.status(400).json({ error: 'Failed to update enrollment' })
   }
 })

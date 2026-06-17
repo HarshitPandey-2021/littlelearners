@@ -13,7 +13,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${fredoka.variable} ${jakarta.variable}`} suppressHydrationWarning>
+    <html 
+      lang="en" 
+      className={`${fredoka.variable} ${jakarta.variable}`} 
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
       <body className={jakarta.className} suppressHydrationWarning>
         {children}
       </body>
