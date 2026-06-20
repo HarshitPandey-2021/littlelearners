@@ -400,7 +400,7 @@ export default function EnrollPage() {
                     )}
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-ink mb-2">
                       Preferred Batch <span className="text-ink-muted text-xs">(Optional)</span>
                     </label>
@@ -412,7 +412,7 @@ export default function EnrollPage() {
                       className="w-full px-4 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                       placeholder="e.g., Weekday Mornings, Weekend Evenings"
                     />
-                  </div>
+                  </div> */}
 
                   <div>
                     <label className="block text-sm font-medium text-ink mb-2">
