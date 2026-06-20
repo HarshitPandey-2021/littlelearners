@@ -34,8 +34,8 @@ export default function Navbar() {
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
               <span className="text-white font-bold text-xl">L</span>
             </div>
-            <span className="font-display font-bold text-lg sm:text-xl text-ink">
-              LittleLearners
+            <span className="font-display font-bold text-xl text-ink">
+              La English Atelier
             </span>
           </Link>
 

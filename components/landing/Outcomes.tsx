@@ -6,14 +6,10 @@ import { CheckCircle } from 'lucide-react'
 
 export default function Outcomes() {
   const outcomes = [
-    'Read simple sentences confidently',
-    'Solve basic math problems independently',
-    'Express creativity through art and music',
-    'Think critically and ask questions',
-    'Work collaboratively with peers',
-    'Build self-confidence and curiosity',
-    'Develop focus and attention skills',
-    'Love learning and exploring new topics',
+    'Speak English with confidence',
+  'Improve grammar and vocabulary',
+  'Develop reading and writing skills',
+  'Communicate efficiently in everyday situations',
   ]
 
   return (

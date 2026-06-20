@@ -354,11 +354,11 @@ git push origin feature/enrollment-form
 
 ### Frontend & Design
 
-Your Name
+Shakti  
 
 ### Backend & Database
 
-Friend's Name
+Harshit
 
 ---
 

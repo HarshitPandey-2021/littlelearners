@@ -7,7 +7,7 @@ export default function TrustStrip() {
   const stats = [
     { icon: Users, value: '2,000+', label: 'Happy Learners' },
     { icon: Star, value: '4.9', label: 'Parent Rating' },
-    { icon: Award, value: '100%', label: 'Certified Educators' },
+    { icon: Award, value: '100%', label: 'Experienced Educators' },
     { icon: Video, value: 'Live', label: 'Interactive Classes' },
   ]
 

@@ -37,17 +37,11 @@ export default function CTA() {
                 Enroll Now →
               </Button>
             </Link>
-            <Button 
-              size="lg" 
-              variant="secondary"
-              className="border-white text-white hover:bg-white/10"
-            >
-              Book a Free Trial
-            </Button>
+            
           </div>
 
           <p className="text-white/70 text-sm mt-6">
-            ✓ No commitment required  ✓ Money-back guarantee  ✓ Start anytime
+            ✓ Learner-friendly environment        ✓ Start anytime
           </p>
         </motion.div>
       </div>

@@ -75,8 +75,8 @@ export default function Hero() {
               transition={{ delay: 0.3 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-ink mb-4 sm:mb-6 leading-tight"
             >
-              Where Curious Minds Begin Their{' '}
-              <span className="text-primary bg-clip-text">Greatest Adventure</span>
+              Crafting Confidence{' '}
+              <span className="text-primary bg-clip-text">Creating Expression</span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -86,9 +86,9 @@ export default function Hero() {
               transition={{ delay: 0.4 }}
               className="text-base sm:text-lg text-ink-muted mb-6 sm:mb-8 max-w-xl leading-relaxed"
             >
-              Live, interactive online classes with certified teachers. 
-              Small batches, big learning. Build strong foundations in reading, 
-              math, creativity, and critical thinking.
+              Live, interactive online classes with experienced educator. 
+              Small batches, big learning. Build strong foundations in English Grammar, 
+              Phonics, Creative Expression, and fluent communication.
             </motion.p>
 
             {/* CTAs */}
@@ -103,9 +103,7 @@ export default function Hero() {
                   Enroll Now →
                 </Button>
               </Link>
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                Book a Free Trial
-              </Button>
+              
             </motion.div>
 
             {/* Trust indicators */}
