@@ -41,7 +41,7 @@ export default function CTA() {
           </div>
 
           <p className="text-white/70 text-sm mt-6">
-            ✓ Learning-friendly environment   ✓ Start anytime
+            ✓ Learner-friendly environment        ✓ Start anytime
           </p>
         </motion.div>
       </div>

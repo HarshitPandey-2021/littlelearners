@@ -33,7 +33,7 @@ export default function Navbar() {
               <span className="text-white font-bold text-xl">L</span>
             </div>
             <span className="font-display font-bold text-xl text-ink">
-              LittleLearners
+              La English Atelier
             </span>
           </Link>
 
