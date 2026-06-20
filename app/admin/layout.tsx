@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Users, Settings, LogOut, Menu, X } from 'lucide-react'
@@ -8,6 +9,7 @@ import { cn } from '@/lib/utils'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const navigation = [
@@ -15,6 +17,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Enrollments', href: '/admin/enrollments', icon: Users },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ]
+
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:5000/api/v1/admin/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+      router.push('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background-cream">
@@ -72,7 +86,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
-          <button className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-muted hover:bg-error/5 hover:text-error transition-colors w-full">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-muted hover:bg-error/5 hover:text-error transition-colors w-full"
+          >
             <LogOut className="w-5 h-5" />
             <span className="font-medium">Logout</span>
           </button>

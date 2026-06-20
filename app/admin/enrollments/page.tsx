@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
-import { Search, Download, Eye } from 'lucide-react'
+import Button from '@/components/ui/Button'
+import { Search, Download, Eye, Pencil, Trash2, X } from 'lucide-react'
 
 interface Enrollment {
   _id: string
@@ -15,6 +16,8 @@ interface Enrollment {
   email: string
   city: string
   howDidYouHear: string
+  preferredBatch?: string
+  additionalNotes?: string
   status: 'new' | 'contacted' | 'enrolled' | 'closed'
   createdAt: string
 }
@@ -25,6 +28,8 @@ export default function EnrollmentsPage() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [selectedEnrollment, setSelectedEnrollment] = useState<Enrollment | null>(null)
+  const [editMode, setEditMode] = useState(false)
+  const [editData, setEditData] = useState<Enrollment | null>(null)
 
   useEffect(() => {
     fetchEnrollments()
@@ -70,6 +75,60 @@ export default function EnrollmentsPage() {
     }
   }
 
+  const handleEdit = (enrollment: Enrollment) => {
+    setEditData({ ...enrollment })
+    setEditMode(true)
+    setSelectedEnrollment(enrollment)
+  }
+
+  const saveEdit = async () => {
+    if (!editData) return
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/v1/enrollments/${editData._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(editData),
+      })
+
+      if (response.ok) {
+        fetchEnrollments()
+        setEditMode(false)
+        setSelectedEnrollment(null)
+        setEditData(null)
+        alert('Enrollment updated successfully!')
+      }
+    } catch (error) {
+      console.error('Error saving edit:', error)
+      alert('Failed to update enrollment')
+    }
+  }
+
+  const handleDelete = async (id: string, studentName: string) => {
+    if (!confirm(`Are you sure you want to delete enrollment for ${studentName}? This cannot be undone.`)) {
+      return
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/v1/enrollments/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+
+      if (response.ok) {
+        fetchEnrollments()
+        setSelectedEnrollment(null)
+        alert('Enrollment deleted successfully')
+      } else {
+        alert('Failed to delete enrollment')
+      }
+    } catch (error) {
+      console.error('Error deleting enrollment:', error)
+      alert('Failed to delete enrollment')
+    }
+  }
+
   const exportToCSV = () => {
     const headers = ['Student Name', 'Parent Name', 'Age', 'Mobile', 'WhatsApp', 'Email', 'City', 'Source', 'Status', 'Date']
     const rows = enrollments.map(e => [
@@ -95,9 +154,9 @@ export default function EnrollmentsPage() {
   }
 
   const filteredEnrollments = enrollments.filter(e =>
-    e.studentName?.toLowerCase().includes(search.toLowerCase()) ||
-    e.parentName?.toLowerCase().includes(search.toLowerCase()) ||
-    e.email?.toLowerCase().includes(search.toLowerCase())
+    (e.studentName?.toLowerCase() || '').includes(search.toLowerCase()) ||
+    (e.parentName?.toLowerCase() || '').includes(search.toLowerCase()) ||
+    (e.email?.toLowerCase() || '').includes(search.toLowerCase())
   )
 
   const getStatusBadge = (status: string) => {
@@ -165,27 +224,13 @@ export default function EnrollmentsPage() {
           <table className="w-full">
             <thead className="bg-background-lavender border-b border-border">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  Student
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  Parent
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  Contact
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  City
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Student</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Parent</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">City</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -217,12 +262,29 @@ export default function EnrollmentsPage() {
                     {new Date(enrollment.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
-                    <button
-                      onClick={() => setSelectedEnrollment(enrollment)}
-                      className="text-primary hover:text-primary-dark"
-                    >
-                      <Eye className="w-5 h-5" />
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setSelectedEnrollment(enrollment)}
+                        className="text-primary hover:text-primary-dark"
+                        title="View Details"
+                      >
+                        <Eye className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleEdit(enrollment)}
+                        className="text-secondary hover:text-secondary-dark"
+                        title="Edit"
+                      >
+                        <Pencil className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(enrollment._id, enrollment.studentName)}
+                        className="text-error hover:text-error/80"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -237,57 +299,146 @@ export default function EnrollmentsPage() {
         )}
       </Card>
 
-      {/* Detail Modal */}
+      {/* Detail/Edit Modal */}
       {selectedEnrollment && (
-        <div className="fixed inset-0 bg-ink/50 flex items-center justify-center p-4 z-50" onClick={() => setSelectedEnrollment(null)}>
-          <Card className="max-w-2xl w-full p-8" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-display font-bold text-ink mb-6">Enrollment Details</h2>
-            
-            <div className="grid sm:grid-cols-2 gap-4 mb-6">
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">Student Name</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.studentName}</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">Age</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.childAge} years</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">Parent Name</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.parentName}</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">City</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.city}</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">Mobile</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.parentMobile}</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">WhatsApp</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.whatsappNumber}</div>
-              </div>
-              <div className="sm:col-span-2">
-                <div className="text-xs text-ink-muted uppercase mb-1">Email</div>
-                <div className="font-semibold text-ink">{selectedEnrollment.email}</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">Source</div>
-                <div className="font-semibold text-ink capitalize">{selectedEnrollment.howDidYouHear}</div>
-              </div>
-              <div>
-                <div className="text-xs text-ink-muted uppercase mb-1">Status</div>
-                {getStatusBadge(selectedEnrollment.status)}
-              </div>
+        <div className="fixed inset-0 bg-ink/50 flex items-center justify-center p-4 z-50" onClick={() => {
+          setSelectedEnrollment(null)
+          setEditMode(false)
+          setEditData(null)
+        }}>
+          <Card className="max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-display font-bold text-ink">
+                {editMode ? 'Edit Enrollment' : 'Enrollment Details'}
+              </h2>
+              <button onClick={() => {
+                setSelectedEnrollment(null)
+                setEditMode(false)
+                setEditData(null)
+              }} className="text-ink-muted hover:text-ink">
+                <X className="w-6 h-6" />
+              </button>
             </div>
+            
+            {editMode && editData ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1">Student Name</label>
+                  <input
+                    value={editData.studentName}
+                    onChange={(e) => setEditData({ ...editData, studentName: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border-2 border-border focus:border-primary outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1">Parent Name</label>
+                  <input
+                    value={editData.parentName}
+                    onChange={(e) => setEditData({ ...editData, parentName: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border-2 border-border focus:border-primary outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1">Email</label>
+                  <input
+                    type="email"
+                    value={editData.email}
+                    onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border-2 border-border focus:border-primary outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1">Mobile</label>
+                  <input
+                    value={editData.parentMobile}
+                    onChange={(e) => setEditData({ ...editData, parentMobile: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border-2 border-border focus:border-primary outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1">WhatsApp</label>
+                  <input
+                    value={editData.whatsappNumber}
+                    onChange={(e) => setEditData({ ...editData, whatsappNumber: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border-2 border-border focus:border-primary outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-ink mb-1">City</label>
+                  <input
+                    value={editData.city}
+                    onChange={(e) => setEditData({ ...editData, city: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border-2 border-border focus:border-primary outline-none"
+                  />
+                </div>
 
-            <button
-              onClick={() => setSelectedEnrollment(null)}
-              className="w-full px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors"
-            >
-              Close
-            </button>
+                <div className="flex gap-3 pt-4">
+                  <Button onClick={saveEdit} className="flex-1">
+                    Save Changes
+                  </Button>
+                  <Button variant="secondary" onClick={() => {
+                    setEditMode(false)
+                    setEditData(null)
+                  }} className="flex-1">
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">Student Name</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.studentName}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">Age</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.childAge} years</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">Parent Name</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.parentName}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">City</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.city}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">Mobile</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.parentMobile}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">WhatsApp</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.whatsappNumber}</div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <div className="text-xs text-ink-muted uppercase mb-1">Email</div>
+                    <div className="font-semibold text-ink">{selectedEnrollment.email}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">Source</div>
+                    <div className="font-semibold text-ink capitalize">{selectedEnrollment.howDidYouHear}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-ink-muted uppercase mb-1">Status</div>
+                    {getStatusBadge(selectedEnrollment.status)}
+                  </div>
+                  {selectedEnrollment.additionalNotes && (
+                    <div className="sm:col-span-2">
+                      <div className="text-xs text-ink-muted uppercase mb-1">Notes</div>
+                      <div className="font-semibold text-ink">{selectedEnrollment.additionalNotes}</div>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => setSelectedEnrollment(null)}
+                  className="w-full px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors"
+                >
+                  Close
+                </button>
+              </>
+            )}
           </Card>
         </div>
       )}
