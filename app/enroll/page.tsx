@@ -143,14 +143,18 @@ export default function EnrollPage() {
             </div>
 
             <div className="space-y-3">
-              <Button className="w-full" onClick={() => window.location.href = 'https://wa.me/1234567890'}>
-                💬 Chat on WhatsApp
-              </Button>
-              <Link href="/">
-                <Button variant="secondary" className="w-full">
-                  ← Back to Home
-                </Button>
-              </Link>
+             <Button
+  className="w-full"
+  onClick={() => window.location.href = 'https://wa.me/1234567890'}
+>
+  💬 Chat on WhatsApp
+</Button>
+
+<Link href="/" className="block mt-4">
+  <Button variant="secondary" className="w-full">
+    ← Back to Home
+  </Button>
+</Link>
             </div>
           </Card>
         </motion.div>

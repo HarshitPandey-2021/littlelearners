@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import { Lock } from 'lucide-react'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -39,6 +40,8 @@ export default function LoginPage() {
   }
 
   return (
+    
+    
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background-cream to-accent/10 flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8">
         <div className="text-center mb-8">
@@ -48,6 +51,7 @@ export default function LoginPage() {
           <h1 className="text-3xl font-display font-bold text-ink mb-2">Admin Login</h1>
           <p className="text-ink-muted">LittleLearners Academy</p>
         </div>
+
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -75,14 +79,25 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="bg-error/10 border border-error/20 rounded-xl p-3 text-error text-sm">
+            <div className="bg-error/10 border border-error/20 rounded-xl p-3 text-error text-sm space-y-3">
               {error}
             </div>
           )}
+<div className="space-y-3">
+  <Button type="submit" className="w-full" disabled={loading}>
+    {loading ? 'Logging in...' : 'Login'}
+  </Button>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </Button>
+  <Link href="/" className="block">
+    <Button
+      type="button"
+      variant="secondary"
+      className="w-full"
+    >
+      ← Back to Home
+    </Button>
+  </Link>
+</div>
         </form>
 
         <p className="text-center text-sm text-ink-muted mt-6">
