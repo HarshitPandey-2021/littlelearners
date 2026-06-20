@@ -28,10 +28,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-white font-bold text-xl">L</span>
-            </div>
+          <Link href="\" className="flex items-center space-x-2">
+          <img src ="/logo.png" alt="La English Atelier logo" width={40} height={40}/>
             <span className="font-display font-bold text-xl text-ink">
               La English Atelier
             </span>
