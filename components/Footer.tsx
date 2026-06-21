@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin } from 'lucide-react'
 const socialLinks = [
   {
     name: 'Facebook',
-    href: 'https://facebook.com',
+    href: 'https://www.facebook.com/share/1FuHf4ganM/',
     bg: 'bg-[#1877F2]',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -14,7 +14,7 @@ const socialLinks = [
   },
   {
     name: 'Instagram',
-    href: 'https://instagram.com',
+    href: 'https://www.instagram.com/laenglishatelier?igsh=N3hmM2RtYmhsN2tx',
     bg: 'bg-gradient-to-br from-[#FEDA77] via-[#D62976] to-[#4F5BD5]',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -24,7 +24,7 @@ const socialLinks = [
   },
   {
     name: 'LinkedIn',
-    href: 'https://linkedin.com',
+    href: 'https://www.linkedin.com/in/rashida-zaidi-27184761?utm_source=share_via&utm_content=profile&utm_medium=member_android',
     bg: 'bg-[#0A66C2]',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
