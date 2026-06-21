@@ -41,7 +41,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-          <img src ="/logo.png" alt="La English Atelier logo" width={40} height={40}/>
+            <img src="/logo.png" alt="La English Atelier logo" width={40} height={40} />
             <span className="font-display font-bold text-xl text-ink">
               La English Atelier
             </span>
@@ -92,7 +92,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-3 border-t border-border">
+          <div className="md:hidden py-4 space-y-3 border-t border-border bg-white rounded-b-xl shadow-lg">
             {navLinks.map((link) => {
               const isActive = link.isRoute && pathname === link.href
               return (
@@ -120,7 +120,7 @@ export default function Navbar() {
               Admin Login
             </Link>
             <div className="px-4 pt-2">
-              <Link href="/enroll" className="block">
+              <Link href="/enroll" className="block" onClick={() => setMobileMenuOpen(false)}>
                 <Button size="md" className="w-full">Enroll Now</Button>
               </Link>
             </div>
