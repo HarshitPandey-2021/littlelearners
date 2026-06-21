@@ -5,11 +5,13 @@ import Admin from '../models/Admin'
 
 const router = express.Router()
 
+const isProduction = process.env.NODE_ENV !== 'development'
+
 // POST /api/v1/admin/login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
-    
+
     const admin = await Admin.findOne({ email })
     if (!admin) {
       return res.status(401).json({ error: 'Invalid credentials' })
@@ -26,20 +28,11 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     )
 
-    const isProduction = process.env.NODE_ENV === 'deployment'
-
-    // Set TWO cookies - one for Next.js middleware, one for API auth
     res.cookie('auth_token', token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    })
-
-    res.cookie('admin_logged_in', 'true', {
-      httpOnly: false, // Accessible by Next.js middleware
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      sameSite: 'lax',
+      path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
@@ -52,24 +45,20 @@ router.post('/login', async (req, res) => {
 
 // POST /api/v1/admin/logout
 router.post('/logout', (req, res) => {
-  const isProduction = process.env.NODE_ENV === 'deployment'
-
   res.clearCookie('auth_token', {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
+    sameSite: 'lax',
+    path: '/',
   })
-  res.clearCookie('admin_logged_in', {
-    httpOnly: false,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
-  })
+
   res.json({ message: 'Logged out successfully' })
 })
 
-// GET /api/v1/admin/check - Check if logged in
+// GET /api/v1/admin/check
 router.get('/check', (req, res) => {
   const token = req.cookies.auth_token
+
   if (!token) {
     return res.status(401).json({ authenticated: false })
   }

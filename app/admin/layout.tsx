@@ -1,12 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Users, Settings, LogOut, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { API_URL } from '@/lib/config'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -17,18 +15,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   useEffect(() => {
     const verifyAuth = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/v1/admin/check`, {
+        const res = await fetch('/api/v1/admin/check', {
           credentials: 'include',
         })
+
         if (!res.ok) {
           router.push('/login')
-        } else {
-          setChecking(false)
+          return
         }
+
+        setChecking(false)
       } catch {
         router.push('/login')
       }
     }
+
     verifyAuth()
   }, [router])
 
@@ -40,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleLogout = async () => {
     try {
-      await fetch(`${API_URL}/api/v1/admin/logout`, {
+      await fetch('/api/v1/admin/logout', {
         method: 'POST',
         credentials: 'include',
       })
@@ -60,7 +61,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-background-cream">
-      {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-ink/50 z-40 lg:hidden"
@@ -68,7 +68,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={cn(
           'fixed top-0 left-0 bottom-0 w-64 bg-white border-r border-border z-50 transform transition-transform duration-200 lg:translate-x-0',
@@ -124,7 +123,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="lg:pl-64">
         <header className="bg-white border-b border-border sticky top-0 z-30">
           <div className="px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
