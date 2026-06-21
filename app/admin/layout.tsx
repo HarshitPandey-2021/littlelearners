@@ -1,17 +1,36 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Users, Settings, LogOut, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
 import { API_URL } from '@/lib/config'
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/v1/admin/check`, {
+          credentials: 'include',
+        })
+        if (!res.ok) {
+          router.push('/login')
+        } else {
+          setChecking(false)
+        }
+      } catch {
+        router.push('/login')
+      }
+    }
+    verifyAuth()
+  }, [router])
 
   const navigation = [
     { name: 'Overview', href: '/admin', icon: LayoutDashboard },
@@ -19,17 +38,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ]
 
- const handleLogout = async () => {
-  try {
-    await fetch(`${API_URL}/api/v1/admin/logout`, {
-      method: 'POST',
-      credentials: 'include',
-    })
-    router.push('/login')
-  } catch (error) {
-    console.error('Logout error:', error)
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_URL}/api/v1/admin/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      router.push('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
-}
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background-cream">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background-cream">
@@ -87,7 +114,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
-          <button 
+          <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-muted hover:bg-error/5 hover:text-error transition-colors w-full"
           >
@@ -99,7 +126,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main content */}
       <div className="lg:pl-64">
-        {/* Top bar */}
         <header className="bg-white border-b border-border sticky top-0 z-30">
           <div className="px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <button
@@ -112,7 +138,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="ml-auto flex items-center gap-4">
               <div className="text-right hidden sm:block">
                 <div className="text-sm font-medium text-ink">Admin User</div>
-                <div className="text-xs text-ink-muted">admin@littlelearners.com</div>
+                <div className="text-xs text-ink-muted">admin@laenglishatelier.com</div>
               </div>
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                 <span className="text-white font-semibold">A</span>
@@ -121,7 +147,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        {/* Page content */}
         <main className="p-4 sm:p-6 lg:p-8">
           {children}
         </main>
