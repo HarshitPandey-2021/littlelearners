@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     )
 
-    const isProduction = process.env.NODE_ENV === 'production'
+    const isProduction = process.env.NODE_ENV === 'deployment'
 
     // Set TWO cookies - one for Next.js middleware, one for API auth
     res.cookie('auth_token', token, {
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
 
 // POST /api/v1/admin/logout
 router.post('/logout', (req, res) => {
-  const isProduction = process.env.NODE_ENV === 'production'
+  const isProduction = process.env.NODE_ENV === 'deployment'
 
   res.clearCookie('auth_token', {
     httpOnly: true,
