@@ -98,6 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={() => setSidebarOpen(false)}
                 className={cn(
                   'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
                   isActive

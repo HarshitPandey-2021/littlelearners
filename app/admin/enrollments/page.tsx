@@ -35,14 +35,27 @@ export default function EnrollmentsPage() {
     fetchEnrollments()
   }, [statusFilter])
 
+useEffect(() => {
+  if (selectedEnrollment) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = 'unset'
+  }
+
+  return () => {
+    document.body.style.overflow = 'unset'
+  }
+}, [selectedEnrollment])
+
   const fetchEnrollments = async () => {
     try {
       const params = new URLSearchParams()
       if (statusFilter) params.append('status', statusFilter)
       
-      const response = await fetch(`http://localhost:5000/api/v1/enrollments?${params}`, {
-        credentials: 'include',
-      })
+      // in fetchEnrollments
+const response = await fetch(`/api/v1/enrollments?${params}`, {
+  credentials: 'include',
+})
       
       if (response.ok) {
         const data = await response.json()
@@ -57,13 +70,13 @@ export default function EnrollmentsPage() {
 
   const updateStatus = async (id: string, newStatus: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/enrollments/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ status: newStatus }),
-      })
-
+     // in updateStatus
+const response = await fetch(`/api/v1/enrollments/${id}`, {
+  method: 'PATCH',
+  headers: { 'Content-Type': 'application/json' },
+  credentials: 'include',
+  body: JSON.stringify({ status: newStatus }),
+})
       if (response.ok) {
         fetchEnrollments()
         if (selectedEnrollment?._id === id) {
@@ -85,12 +98,13 @@ export default function EnrollmentsPage() {
     if (!editData) return
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/enrollments/${editData._id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(editData),
-      })
+     // in saveEdit
+const response = await fetch(`/api/v1/enrollments/${editData._id}`, {
+  method: 'PATCH',
+  headers: { 'Content-Type': 'application/json' },
+  credentials: 'include',
+  body: JSON.stringify(editData),
+})
 
       if (response.ok) {
         fetchEnrollments()
@@ -111,10 +125,10 @@ export default function EnrollmentsPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/enrollments/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      })
+   const response = await fetch(`/api/v1/enrollments/${id}`, {
+  method: 'DELETE',
+  credentials: 'include',
+})
 
       if (response.ok) {
         fetchEnrollments()
@@ -218,86 +232,122 @@ export default function EnrollmentsPage() {
         </div>
       </Card>
 
-      {/* Table */}
-      <Card className="overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-background-lavender border-b border-border">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Student</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Parent</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">City</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Date</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredEnrollments.map((enrollment) => (
-                <tr key={enrollment._id} className="hover:bg-background-cream transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-ink">{enrollment.studentName}</div>
-                    <div className="text-sm text-ink-muted">{enrollment.childAge} years</div>
-                  </td>
-                  <td className="px-6 py-4 text-ink">{enrollment.parentName}</td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-ink">{enrollment.parentMobile}</div>
-                    <div className="text-sm text-ink-muted">{enrollment.email}</div>
-                  </td>
-                  <td className="px-6 py-4 text-ink">{enrollment.city}</td>
-                  <td className="px-6 py-4">
-                    <select
-                      value={enrollment.status}
-                      onChange={(e) => updateStatus(enrollment._id, e.target.value)}
-                      className="px-3 py-1 rounded-lg border border-border text-sm"
-                    >
-                      <option value="new">New</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="enrolled">Enrolled</option>
-                      <option value="closed">Closed</option>
-                    </select>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-ink-muted">
-                    {new Date(enrollment.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setSelectedEnrollment(enrollment)}
-                        className="text-primary hover:text-primary-dark"
-                        title="View Details"
-                      >
-                        <Eye className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => handleEdit(enrollment)}
-                        className="text-secondary hover:text-secondary-dark"
-                        title="Edit"
-                      >
-                        <Pencil className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(enrollment._id, enrollment.studentName)}
-                        className="text-error hover:text-error/80"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+<Card className="overflow-hidden">
+  {/* Desktop table */}
+  <div className="hidden md:block overflow-x-auto">
+    <table className="w-full">
+      <thead className="bg-background-lavender border-b border-border">
+        <tr>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Student</th>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Parent</th>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Contact</th>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">City</th>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Status</th>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Date</th>
+          <th className="px-6 py-4 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-border">
+        {filteredEnrollments.map((enrollment) => (
+          <tr key={enrollment._id} className="hover:bg-background-cream transition-colors">
+            <td className="px-6 py-4">
+              <div className="font-medium text-ink">{enrollment.studentName}</div>
+              <div className="text-sm text-ink-muted">{enrollment.childAge} years</div>
+            </td>
+            <td className="px-6 py-4 text-ink">{enrollment.parentName}</td>
+            <td className="px-6 py-4">
+              <div className="text-sm text-ink">{enrollment.parentMobile}</div>
+              <div className="text-sm text-ink-muted">{enrollment.email}</div>
+            </td>
+            <td className="px-6 py-4 text-ink">{enrollment.city}</td>
+            <td className="px-6 py-4">
+              <select
+                value={enrollment.status}
+                onChange={(e) => updateStatus(enrollment._id, e.target.value)}
+                className="px-3 py-1 rounded-lg border border-border text-sm"
+              >
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="enrolled">Enrolled</option>
+                <option value="closed">Closed</option>
+              </select>
+            </td>
+            <td className="px-6 py-4 text-sm text-ink-muted">
+              {new Date(enrollment.createdAt).toLocaleDateString()}
+            </td>
+            <td className="px-6 py-4">
+              <div className="flex gap-2">
+                <button onClick={() => setSelectedEnrollment(enrollment)} className="text-primary hover:text-primary-dark" title="View Details">
+                  <Eye className="w-5 h-5" />
+                </button>
+                <button onClick={() => handleEdit(enrollment)} className="text-secondary hover:text-secondary-dark" title="Edit">
+                  <Pencil className="w-5 h-5" />
+                </button>
+                <button onClick={() => handleDelete(enrollment._id, enrollment.studentName)} className="text-error hover:text-error/80" title="Delete">
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Mobile card list */}
+  <div className="md:hidden divide-y divide-border">
+    {filteredEnrollments.map((enrollment) => (
+      <div key={enrollment._id} className="p-4 space-y-3">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="font-semibold text-ink">{enrollment.studentName}</div>
+            <div className="text-sm text-ink-muted">{enrollment.childAge} years old</div>
+          </div>
+          {getStatusBadge(enrollment.status)}
         </div>
 
-        {filteredEnrollments.length === 0 && (
-          <div className="text-center py-12 text-ink-muted">
-            No enrollments found
+        <div className="text-sm space-y-1">
+          <div className="text-ink"><span className="text-ink-muted">Parent:</span> {enrollment.parentName}</div>
+          <div className="text-ink"><span className="text-ink-muted">Mobile:</span> {enrollment.parentMobile}</div>
+          <div className="text-ink"><span className="text-ink-muted">Email:</span> {enrollment.email}</div>
+          <div className="text-ink"><span className="text-ink-muted">City:</span> {enrollment.city}</div>
+          <div className="text-ink-muted text-xs">
+            {new Date(enrollment.createdAt).toLocaleDateString()}
           </div>
-        )}
-      </Card>
+        </div>
+
+        <select
+          value={enrollment.status}
+          onChange={(e) => updateStatus(enrollment._id, e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border border-border text-sm"
+        >
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="enrolled">Enrolled</option>
+          <option value="closed">Closed</option>
+        </select>
+
+        <div className="flex gap-3 pt-1">
+          <button onClick={() => setSelectedEnrollment(enrollment)} className="flex items-center gap-1.5 text-sm text-primary font-medium">
+            <Eye className="w-4 h-4" /> View
+          </button>
+          <button onClick={() => handleEdit(enrollment)} className="flex items-center gap-1.5 text-sm text-secondary font-medium">
+            <Pencil className="w-4 h-4" /> Edit
+          </button>
+          <button onClick={() => handleDelete(enrollment._id, enrollment.studentName)} className="flex items-center gap-1.5 text-sm text-error font-medium">
+            <Trash2 className="w-4 h-4" /> Delete
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {filteredEnrollments.length === 0 && (
+    <div className="text-center py-12 text-ink-muted">
+      No enrollments found
+    </div>
+  )}
+</Card>
 
       {/* Detail/Edit Modal */}
       {selectedEnrollment && (

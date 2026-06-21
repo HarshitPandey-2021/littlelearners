@@ -2,6 +2,8 @@ import express from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Admin from '../models/Admin'
+import { authMiddleware } from '../middleware/auth'
+
 
 const router = express.Router()
 
@@ -66,5 +68,39 @@ router.get('/check', (req, res) => {
     res.status(401).json({ authenticated: false })
   }
 })
+
+
+//add this route
+router.post('/change-password', authMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body
+    const adminId = (req as any).user.id
+
+    const admin = await Admin.findById(adminId)
+    if (!admin) {
+      return res.status(404).json({ error: 'Admin not found' })
+    }
+
+    const isValid = await bcrypt.compare(currentPassword, admin.passwordHash)
+    if (!isValid) {
+      return res.status(401).json({ error: 'Current password is incorrect' })
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 10)
+    admin.passwordHash = newHash
+    await admin.save()
+
+    res.json({ message: 'Password updated successfully' })
+  } catch (error) {
+    console.error('Change password error:', error)
+    res.status(500).json({ error: 'Failed to update password' })
+  }
+})
+
+
+// router.get('/ping-test', (req, res) => {
+//   res.json({ pong: true })
+// })
+
 
 export default router

@@ -18,7 +18,7 @@ export default function AdminOverview() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/enrollments/stats', {
+      const response = await fetch('/api/v1/enrollments/stats', {
         credentials: 'include',
       })
       if (response.ok) {
