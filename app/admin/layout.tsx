@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Users, Settings, LogOut, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+import { API_URL } from '@/lib/config'
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
@@ -18,17 +19,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ]
 
-  const handleLogout = async () => {
-    try {
-      await fetch('http://localhost:5000/api/v1/admin/logout', {
-        method: 'POST',
-        credentials: 'include',
-      })
-      router.push('/login')
-    } catch (error) {
-      console.error('Logout error:', error)
-    }
+ const handleLogout = async () => {
+  try {
+    await fetch(`${API_URL}/api/v1/admin/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+    router.push('/login')
+  } catch (error) {
+    console.error('Logout error:', error)
   }
+}
 
   return (
     <div className="min-h-screen bg-background-cream">

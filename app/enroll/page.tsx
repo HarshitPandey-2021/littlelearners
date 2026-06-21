@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import { ArrowLeft, CheckCircle, Phone, Mail, MapPin, Users, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import { API_URL } from '@/lib/config'
 
 const COUNTRY_CODES = [
   { code: '+91', flag: '🇮🇳' },
@@ -158,7 +159,7 @@ export default function EnrollPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/enrollments', {
+  const response = await fetch(`${API_URL}/api/v1/enrollments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

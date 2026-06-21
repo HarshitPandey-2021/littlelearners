@@ -26,18 +26,20 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     )
 
+    const isProduction = process.env.NODE_ENV === 'production'
+
     // Set TWO cookies - one for Next.js middleware, one for API auth
     res.cookie('auth_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
 
     res.cookie('admin_logged_in', 'true', {
       httpOnly: false, // Accessible by Next.js middleware
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
@@ -50,8 +52,18 @@ router.post('/login', async (req, res) => {
 
 // POST /api/v1/admin/logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('auth_token')
-  res.clearCookie('admin_logged_in')
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  res.clearCookie('auth_token', {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+  })
+  res.clearCookie('admin_logged_in', {
+    httpOnly: false,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+  })
   res.json({ message: 'Logged out successfully' })
 })
 

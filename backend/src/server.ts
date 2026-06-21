@@ -20,6 +20,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
+
 app.use(express.json())
 app.use(cookieParser())
 

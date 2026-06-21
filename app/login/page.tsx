@@ -6,6 +6,7 @@ import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import { Lock } from 'lucide-react'
 import Link from 'next/link'
+import { API_URL } from '@/lib/config'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -20,7 +21,7 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/admin/login', {
+      const response = await fetch(`${API_URL}/api/v1/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -40,8 +41,6 @@ export default function LoginPage() {
   }
 
   return (
-    
-    
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background-cream to-accent/10 flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8">
         <div className="text-center mb-8">
@@ -52,7 +51,6 @@ export default function LoginPage() {
           <p className="text-ink-muted">La English Atelier</p>
         </div>
 
-
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-ink mb-2">Email</label>
@@ -61,7 +59,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-              placeholder="admin@littlelearners.com"
+              placeholder="admin@laenglishatelier.com"
               required
             />
           </div>
@@ -79,30 +77,23 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="bg-error/10 border border-error/20 rounded-xl p-3 text-error text-sm space-y-3">
+            <div className="bg-error/10 border border-error/20 rounded-xl p-3 text-error text-sm">
               {error}
             </div>
           )}
-<div className="space-y-3">
-  <Button type="submit" className="w-full" disabled={loading}>
-    {loading ? 'Logging in...' : 'Login'}
-  </Button>
 
-  <Link href="/" className="block">
-    <Button
-      type="button"
-      variant="secondary"
-      className="w-full"
-    >
-      ← Back to Home
-    </Button>
-  </Link>
-</div>
+          <div className="space-y-3">
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </Button>
+
+            <Link href="/" className="block">
+              <Button type="button" variant="secondary" className="w-full">
+                ← Back to Home
+              </Button>
+            </Link>
+          </div>
         </form>
-
-        {/* <p className="text-center text-sm text-ink-muted mt-6">
-          Default: admin@littlelearners.com / admin123
-        </p> */}
       </Card>
     </div>
   )
