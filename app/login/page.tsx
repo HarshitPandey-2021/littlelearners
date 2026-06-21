@@ -49,7 +49,7 @@ export default function LoginPage() {
             <Lock className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-display font-bold text-ink mb-2">Admin Login</h1>
-          <p className="text-ink-muted">LittleLearners Academy</p>
+          <p className="text-ink-muted">La English Atelier</p>
         </div>
 
 
