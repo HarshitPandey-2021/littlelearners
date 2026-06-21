@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import { Lock } from 'lucide-react'
 import Link from 'next/link'
-import { API_URL } from '@/lib/config'
+// import { API_URL } from '@/lib/config'
 
 export default function LoginPage() {
   const router = useRouter()

@@ -5,8 +5,6 @@ import Admin from '../models/Admin'
 
 const router = express.Router()
 
-const isProduction = process.env.NODE_ENV !== 'development'
-
 // POST /api/v1/admin/login
 router.post('/login', async (req, res) => {
   try {
@@ -30,7 +28,7 @@ router.post('/login', async (req, res) => {
 
     res.cookie('auth_token', token, {
       httpOnly: true,
-      secure: isProduction,
+      secure: true,
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -47,18 +45,16 @@ router.post('/login', async (req, res) => {
 router.post('/logout', (req, res) => {
   res.clearCookie('auth_token', {
     httpOnly: true,
-    secure: isProduction,
+    secure: true,
     sameSite: 'lax',
     path: '/',
   })
-
   res.json({ message: 'Logged out successfully' })
 })
 
 // GET /api/v1/admin/check
 router.get('/check', (req, res) => {
   const token = req.cookies.auth_token
-
   if (!token) {
     return res.status(401).json({ authenticated: false })
   }

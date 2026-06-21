@@ -159,7 +159,7 @@ export default function EnrollPage() {
     setLoading(true)
 
     try {
-  const response = await fetch(`${API_URL}/api/v1/enrollments`, {
+const response = await fetch('/api/v1/enrollments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
