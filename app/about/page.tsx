@@ -28,8 +28,8 @@ export default function AboutUs() {
               />
             </div>
             <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-2xl shadow-card px-5 py-4 border-2 border-primary/10">
-              <div className="text-2xl font-display font-bold text-primary">18+</div>
-              <div className="text-sm text-ink-muted">Years in Education</div>
+              <div className="text-2xl font-display font-bold text-primary">Rashida Zaidi</div>
+              <div className="text-sm text-ink-muted">Founder & Academic Director</div>
             </div>
           </motion.div>
 
@@ -42,12 +42,12 @@ export default function AboutUs() {
           >
             <Badge variant="primary" className="mb-4">About Us</Badge>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-ink mb-6 leading-tight">
-              Meet the Soul Behind La English Atelier
+              Meet the Visionary Behind La English Atelier
             </h2>
             <h3>Ms. Rashida Zaidi</h3> 
               <p>Founder and Academic Director, La English Atelier</p>
               <p></p>
-              <h4>M.A(English Literature), M.Ed.,B.Ed.</h4>
+              <h4>M.A. (English Literature), M.Ed., B.Ed.</h4>
 
               <p>   </p>
 
@@ -55,15 +55,22 @@ export default function AboutUs() {
             <p className="text-base sm:text-lg text-ink-muted mb-6 leading-relaxed">
                
               
-              Ms. Rashida Zaidi is a distinguished educator, language mentor,
-              and academic leader with 18+ years of experience in education,
-              renowned for her passion for language learning and academic excellence.
+              Ms. Rashida Zaidi is a distinguished educationist, language mentor,
+              and academic leader with nearly two decades of experience in education.
+              Renowned for her passion for language learning and academic excellence, she has dedicated
+              her career to nurturing confident communicators and lifelong learners.
 
             </p>
             <p className="text-base sm:text-lg text-ink-muted mb-8 leading-relaxed">
               As the Founder and Academic Director of La English Atelier, she has envisioned and established
-              a unique learning environment where English is not simply taught but lived and experienced through
-              meaningful conversations, storytelling, Grammar, critical thinking, creativity and self-expression.
+              a unique learning environment where English is not merely taught but experienced through
+              meaningful conversations, storytelling, grammar, critical thinking, creativity, and self-expression.
+            </p>
+
+            <p className="text-base sm:text-lg text-ink-muted mb-8 leading-relaxed">
+              Throughout, her career she has mentored students, guided educators, and championed
+              innovative language-learning practices that help  learners develop 
+              confidence, communication skills, and a lifelong love for English.
             </p>
             
             <p></p>
