@@ -7,7 +7,7 @@ import Outcomes from '@/components/landing/Outcomes'
 import CTA from '@/components/landing/CTA'
 // import Footer from '@/components/Footer'
 export const metadata = {
-  title: 'La English Atelier — Where Curious Minds Begin',
+  title: 'La English Atelier',
   description: 'Interactive online learning for kids aged 5-8. Certified teachers, small batches, live classes.',
 }
 export default function Home() {
