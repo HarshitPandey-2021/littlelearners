@@ -256,7 +256,7 @@ const response = await fetch('/api/v1/enrollments', {
             <div className="space-y-3">
               <Button
                 className="w-full"
-                onClick={() => (window.location.href = 'https://wa.me/1234567890')}
+                onClick={() => (window.location.href = 'https://wa.me/9569467196')}
               >
                 💬 Chat on WhatsApp
               </Button>

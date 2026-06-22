@@ -9,8 +9,8 @@ export default function WhyChooseUs() {
   const features = [
     {
       icon: Award,
-      title: 'Experienced Educators',
-      description: 'Experienced educators with early childhood teaching methods.',
+      title: 'Experienced Educator',
+      description: 'Experienced educator with early childhood teaching methods.',
     },
     {
       icon: Users,
@@ -20,7 +20,7 @@ export default function WhyChooseUs() {
     {
       icon: BarChart3,
       title: 'Progress Reports',
-      description: 'Weekly updates on your childs learning journey.',
+      description: 'Weekly updates on learning journey of every child.',
     },
     {
       icon: Shield,
@@ -34,8 +34,8 @@ export default function WhyChooseUs() {
     },
     {
       icon: GlobeCheck,
-      title: 'American English',
-      description: 'Learning that is  inclusive of understanding pace of learner while abiding to AMERICAN ENGLISH. ',
+      title: 'British English - American Accent',
+      description: 'Learning that is inclusive of understanding pace of learner while abiding to AMERICAN ACCENT. ',
     },
   ]
 
