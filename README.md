@@ -8,7 +8,7 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)
 ![Express](https://img.shields.io/badge/Express-5-black?style=for-the-badge&logo=express)
 
-**Live site:** https://la-english-atelier.vercel.app
+**Live site:** https://laenglishatelier.vercel.app/
 **API:** https://la-english-atelier-api.onrender.com
 
 ---
