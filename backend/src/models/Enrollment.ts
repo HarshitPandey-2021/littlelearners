@@ -65,7 +65,7 @@ export interface IEnrollment extends Document {
 const EnrollmentSchema = new Schema<IEnrollment>({
   studentName: { type: String, required: true },
   parentName: { type: String, required: true },
-  childAge: { type: Number, required: true, min: 5, max: 8 },
+  childAge: { type: Number, required: true, min: 5, max: 10 },
   parentMobile: { type: String, required: true },
   whatsappNumber: { type: String, required: true },
   email: { type: String, required: true },

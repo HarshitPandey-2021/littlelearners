@@ -15,7 +15,7 @@ export default function WhyChooseUs() {
     {
       icon: Users,
       title: 'Small Batch Sizes',
-      description: 'Maximum 5-8 students per session for personalized attention.',
+      description: 'Maximum 5-10 students per session for personalized attention.',
     },
     {
       icon: BarChart3,

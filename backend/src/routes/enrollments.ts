@@ -17,8 +17,8 @@ const validateEnrollment = (data: any) => {
   if (!data.parentName || data.parentName.trim().length < 2) {
     errors.push('Parent name must be at least 2 characters')
   }
-  if (!data.childAge || data.childAge < 5 || data.childAge > 8) {
-    errors.push('Child age must be between 5 and 8')
+  if (!data.childAge || data.childAge < 5 || data.childAge > 10) {
+    errors.push('Child age must be between 5 and 10')
   }
   if (!data.parentMobile || !/^\+?[\d\s-]{10,}$/.test(data.parentMobile)) {
     errors.push('Invalid phone number')

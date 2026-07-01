@@ -335,29 +335,30 @@ const response = await fetch('/api/v1/enrollments', {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-ink mb-2">
-                      Child Age <span className="text-error">*</span>
-                    </label>
-                    <div className="grid grid-cols-4 gap-3">
-                      {[5, 6, 7, 8].map((age) => (
-                        <button
-                          key={age}
-                          type="button"
-                          onClick={() => handleAgeSelect(age)}
-                          className={`py-3 rounded-xl border-2 font-semibold transition-all ${
-                            formData.childAge === age.toString()
-                              ? 'border-primary bg-primary text-white shadow-lg scale-105'
-                              : errors.childAge
-                              ? 'border-error hover:border-error/70'
-                              : 'border-border hover:border-primary hover:bg-primary/5'
-                          }`}
-                        >
-                          {age} yrs
-                        </button>
-                      ))}
-                    </div>
-                    <FieldError message={errors.childAge} />
-                  </div>
+  <label className="block text-sm font-medium text-ink mb-2">
+    Child Age <span className="text-error">*</span>
+  </label>
+  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+    {[5, 6, 7, 8, 9, 10].map((age) => (
+      <button
+        key={age}
+        type="button"
+        onClick={() => handleAgeSelect(age)}
+        className={`py-3 rounded-xl border-2 font-semibold transition-all text-sm sm:text-base ${
+          formData.childAge === age.toString()
+            ? 'border-primary bg-primary text-white shadow-lg scale-105'
+            : errors.childAge
+            ? 'border-error hover:border-error/70'
+            : 'border-border hover:border-primary hover:bg-primary/5'
+        }`}
+      >
+        <span className="sm:hidden">{age}</span>
+        <span className="hidden sm:inline">{age} yrs</span>
+      </button>
+    ))}
+  </div>
+  <FieldError message={errors.childAge} />
+</div>
                 </div>
               </div>
 
